@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: auth-mongo-depl
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: auth-mongo
+  template:
+    metadata:
+      labels:
+        app: auth-mongo
+    spec:
+      containers:
+      - name: auth-mongo
+        image: mongo
+        resources:
+          limits:
+            memory: "1024Mi" # Maximaler Speicher auf 512 MB begrenzen
+            cpu: "1000m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
+          requests:
+            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "250m" # Mindestens 250 Millicores CPU rese
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: auth-mongo-ser
+spec:
+  selector:
+    app: auth-mongo
+  ports:
+  - name: db
+    protocol: TCP
+    port: 27017 # this port is to communicate with pods from outside the cluster , I have it found in Dokumentation
+    targetPort: 27017 # this targetPort is to communicate with pods from inside the cluster, I have it found in Dokumentation

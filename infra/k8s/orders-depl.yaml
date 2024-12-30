@@ -1,0 +1,53 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: orders-depl
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: orders
+  template:
+    metadata:
+      labels:
+        app: orders
+    spec:
+      containers:
+      - name: orders
+        image: mma/orders
+        env:
+        - name: NATS_CLIENT_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NATS_URL
+          value: 'http://nats-ser:4222'
+        - name: NATS_CLUSTER_ID
+          value: ticketing
+        - name: MONGO_URI
+          value: 'mongodb://orders-mongo-ser:27017/orders'
+        - name: JWT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_KEY
+        resources:
+          limits:
+            memory: "1024Mi" # Maximaler Speicher auf 512 MB begrenzen
+            cpu: "1000m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
+          requests:
+            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "250m" # Mindestens 250 Millicores CPU rese
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: orders-ser
+spec:
+  selector:
+    app: orders
+  ports:
+  - name: orders
+    protocol: TCP
+    port: 3000 # this port is to communicate with pods from outside the cluster 
+    targetPort: 3000 # this targetPort is to communicate with pods from inside the cluster

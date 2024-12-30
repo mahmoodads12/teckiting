@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-depl
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: expiration
+  template:
+    metadata:
+      labels:
+        app: expiration
+    spec:
+      containers:
+      - name: expiration
+        image: mma/expiration
+        env:
+        - name: NATS_CLIENT_ID
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NATS_URL
+          value: 'http://nats-ser:4222'
+        - name: NATS_CLUSTER_ID
+          value: ticketing
+        - name: REDIS_HOST
+          value: expiration-redis-ser
+        resources:
+          limits:
+            memory: "512Mi" # Maximaler Speicher auf 512 MB begrenzen
+            cpu: "500m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
+          requests:
+            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "250m" # Mindestens 250 Millicores CPU rese

@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: expiration-redis-depl
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: expiration-redis
+  template:
+    metadata:
+      labels:
+        app: expiration-redis
+    spec:
+      containers:
+      - name: expiration-redis
+        image: redis
+        resources:
+          limits:
+            memory: "512Mi" # Maximaler Speicher auf 512 MB begrenzen
+            cpu: "500m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
+          requests:
+            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "250m" # Mindestens 250 Millicores CPU rese
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: expiration-redis-ser
+spec:
+  selector:
+    app: expiration-redis
+  ports:
+  - name: db
+    protocol: TCP
+    port: 6379 # this port is to communicate with pods from outside the cluster , I have it found in Dokumentation
+    targetPort: 6379 # this targetPort is to communicate with pods from inside the cluster, I have it found in Dokumentation

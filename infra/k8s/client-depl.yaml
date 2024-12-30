@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-depl
+spec:
+  replicas: 1 # number of pods
+  selector:
+    matchLabels:
+      app: client
+  template:
+    metadata:
+      labels:
+        app: client
+    spec:
+      containers:
+      - name: client
+        image: mma/client
+        env:
+        - name: JWT_KEY
+          valueFrom:
+            secretKeyRef:
+              name: jwt-secret
+              key: JWT_KEY
+        resources:
+          limits:
+            memory: "1024Mi" # Maximaler Speicher auf 512 MB begrenzen
+            cpu: "1000m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
+          requests:
+            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "250m" # Mindestens 250 Millicores CPU rese
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: client-ser
+spec:
+  selector:
+    app: client
+  ports:
+  - name: client
+    protocol: TCP
+    port: 3000 # this port is to communicate with pods from outside the cluster 
+    targetPort: 3000 # this targetPort is to communicate with pods from inside the cluster

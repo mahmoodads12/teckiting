@@ -1,0 +1,69 @@
+apiVersion: skaffold/v4beta11
+kind: Config
+build:
+  artifacts:
+  - image: mma/auth
+    context: auth
+    sync:
+      manual:
+      - src: 'src/**/*.ts'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  - image: mma/client
+    context: client
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  - image: mma/tickets
+    context: tickets
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  - image: mma/orders
+    context: orders
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  - image: mma/expiration
+    context: expiration
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  - image: mma/payments
+    context: payments
+    sync:
+      manual:
+      - src: '**/*.js'
+        dest: .
+    docker:
+      dockerfile: dockerfile
+  local:
+    push: false
+manifests:
+  rawYaml:
+  - ./infra/k8s/*
+deploy:
+  kubectl: {}
+
+### NEUE SERVICES ### 
+#  - image: mma/tickets
+#     context: tickets
+#     sync:
+#       manual:
+#       - src: '**/*.js'
+#         dest: .
+#     docker:
+#       dockerfile: dockerfile 
