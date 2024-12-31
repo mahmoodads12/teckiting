@@ -23,7 +23,6 @@ spec:
             secretKeyRef:
               name: jwt-secret
               key: JWT_KEY
-        imagePullPolicy: Never
         resources:
           limits:
             memory: "1024Mi" # Maximaler Speicher auf 512 MB begrenzen
