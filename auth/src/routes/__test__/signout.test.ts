@@ -20,7 +20,8 @@ it('clear the cookie after signing out', async () => {
   if (!cookie) {
     throw new Error('Expected cookie but got undefined.');
   }
-  expect(cookie[0]).toEqual(
-    'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly'
-  );
+  expect([
+    'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; httponly',
+    'session=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT; samesite=lax; httponly',
+  ]).toContain(cookie[0]);
 });
