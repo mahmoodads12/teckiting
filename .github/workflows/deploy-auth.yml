@@ -1,23 +1,23 @@
 name: deploy-auth
 
-on: 
+on:
   push:
     branches:
       - main
-    path:
+    paths:
       - 'auth/**'
 
 jobs:
   build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
-      - run: cd auth && docker build -t mma/auth . 
+      - run: cd auth && docker build -t mma/auth .
       - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
-        env: 
+        env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker tag mma/auth mahmoodads/auth && docker push mahmoodads/auth 
+      - run: docker tag mma/auth mahmoodads/auth && docker push mahmoodads/auth
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
