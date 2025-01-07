@@ -15,7 +15,7 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: process.env.NODE_ENV !== 'test', // Nur in der Produktion 'true'
+    secure: false,
     // httpOnly: true,
     sameSite: 'lax', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
   })

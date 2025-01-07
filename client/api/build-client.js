@@ -8,8 +8,7 @@ const buildClient = ({ req }) => {
       req.headers.cookie || 'Keine Cookies gefunden'
     );
     return axios.create({
-      baseURL:
-        'http://ingress-nginx-controller.ingress-nginx.svc.cluster.local',
+      baseURL: 'ticketing-mma-de.store',
       headers: {
         ...req.headers, // Alle Header weitergeben, einschließlich Cookies
       },
