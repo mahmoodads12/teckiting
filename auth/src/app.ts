@@ -15,7 +15,7 @@ app.use(
   cookieSession({
     signed: false,
     secure: false,
-    // httpOnly: true,
+    httpOnly: true,
     sameSite: 'lax', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
   })
 );
