@@ -10,20 +10,41 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout the repository
       - uses: actions/checkout@v2
-      - run: cd client && docker build -t mahmoodads/client .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      # Build Docker image for the client
+      - run: |
+          cd client
+          docker build -t mahmoodads/client .
+
+      # Log in to Docker Hub
+      - run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-      - run: docker push mahmoodads/client:latest
+
+      # Push the Docker image to Docker Hub
+      - run: |
+          docker push mahmoodads/client:latest
+
+      # Set up DigitalOcean CLI for Kubernetes interaction
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - run: kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
-      - run: kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+      # Create secrets in Kubernetes using kubectl
+      - run: |
+          kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }} --dry-run=client -o yaml | kubectl apply -f -
+          kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }} --dry-run=client -o yaml | kubectl apply -f -
 
-      - run: doctl kubernetes cluster kubeconfig save 633c9e15-59ae-4447-8c6d-9e8a83f7e6dd
-      - run: kubectl rollout restart deployment client-depl
+      # Configure kubeconfig for the DigitalOcean Kubernetes cluster
+      - run: |
+          doctl kubernetes cluster kubeconfig save 633c9e15-59ae-4447-8c6d-9e8a83f7e6dd
+
+      # Restart the Kubernetes deployment to update the client service
+      - run: |
+          kubectl rollout restart deployment client-depl
