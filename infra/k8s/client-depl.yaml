@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: mma/client
+        image: mahmoodads/client
         env:
         - name: JWT_KEY
           valueFrom:
