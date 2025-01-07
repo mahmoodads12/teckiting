@@ -16,10 +16,10 @@ jobs:
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      - run: |
-          # Secrets in Kubernetes mit kubectl erstellen
-          kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
-          kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+      # - run: |
+      #     # Secrets in Kubernetes mit kubectl erstellen
+      #     kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
+      #     kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
 
       - run: doctl kubernetes cluster kubeconfig save 633c9e15-59ae-4447-8c6d-9e8a83f7e6dd
       - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
