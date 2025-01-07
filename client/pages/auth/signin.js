@@ -5,7 +5,7 @@ import dynamic from 'next/dynamic';
 
 const DynamicLoginPage = dynamic(() => import('./signin'), {
   loading: () => {
-    <p>Loading....</p>;
+    <p>Loading...</p>;
   },
 });
 const LoginPage = () => {
