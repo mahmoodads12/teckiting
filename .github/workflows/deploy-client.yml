@@ -11,19 +11,31 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # Checkout Code
       - uses: actions/checkout@v2
-      - run: cd client && docker build -t mahmoodads/client .
-      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+
+      # Docker Image erstellen und pushen
+      - run: |
+          cd client
+          docker build -t mahmoodads/client .
+      - run: |
+          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       - run: docker push mahmoodads/client:latest
+
+      # DigitalOcean API Token verwenden, um Kubernetes zu konfigurieren
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
+      # Secrets in Kubernetes erstellen
       - run: kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
       - run: kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
 
+      # Kubernetes-Cluster Konfiguration sichern
       - run: doctl kubernetes cluster kubeconfig save 633c9e15-59ae-4447-8c6d-9e8a83f7e6dd
+
+      # Deployment neustarten, um das neue Image zu verwenden
       - run: kubectl rollout restart deployment client-depl
