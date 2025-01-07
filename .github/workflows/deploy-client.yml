@@ -23,6 +23,8 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
           
       - run: kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
+      - run: kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+      
 
       - run: doctl kubernetes cluster kubeconfig save ticketing
       - run: kubectl rollout restart deployment client-depl
