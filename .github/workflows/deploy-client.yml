@@ -16,20 +16,16 @@ jobs:
       - uses: actions/checkout@v2
 
       # Docker-Image für den Client bauen
-      - run: |
-          cd client
-          docker build -t mahmoodads/client .
+      - run: cd client && docker build -t mahmoodads/client .
 
       # Bei Docker Hub einloggen
-      - run: |
-          docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+      - run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
         env:
           DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
           DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
 
       # Docker-Image zu Docker Hub pushen
-      - run: |
-          docker push mahmoodads/client:latest
+      - run: docker push mahmoodads/client:latest
 
       # DigitalOcean CLI für die Interaktion mit Kubernetes einrichten
       - uses: digitalocean/action-doctl@v2
@@ -37,9 +33,7 @@ jobs:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
       # Den Kubernetes-Kontext für DigitalOcean setzen
-      - run: |
-          doctl kubernetes cluster kubeconfig save 633c9e15-59ae-4447-8c6d-9e8a83f7e6dd
+      - run: doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_ID }}
 
       # Die Kubernetes-Deployment-Ressource für den Client neu starten
-      - run: |
-          kubectl rollout restart deployment client-depl
+      - run: kubectl rollout restart deployment client-depl
