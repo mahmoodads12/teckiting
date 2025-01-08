@@ -7,13 +7,21 @@ const buildClient = ({ req }) => {
       'Server Cookies:',
       req.headers.cookie || 'Keine Cookies gefunden'
     );
-    return axios.create({
-      baseURL: 'http://www.ticketing-mma-de.store/',
-      headers: {
-        ...req.headers, // Alle Header weitergeben, einschließlich Cookies
-      },
-      withCredentials: true,
-    });
+    return axios
+      .create({
+        baseURL: 'http://www.ticketing-mma-de.store/',
+        headers: {
+          ...req.headers, // Alle Header weitergeben, einschließlich Cookies
+        },
+        withCredentials: true,
+      })
+      .interceptors.response.use(
+        (response) => response,
+        (error) => {
+          console.error('Axios Error:', error.response?.data || error.message);
+          return Promise.reject(error);
+        }
+      );
   } else {
     // Im Browser
     return axios.create({
