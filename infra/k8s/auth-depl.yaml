@@ -28,8 +28,8 @@ spec:
             memory: "512Mi" # Maximaler Speicher auf 512 MB begrenzen
             cpu: " 200m" # Maximaler CPU-Verbrauch auf 500 Millicores begrenzen
           requests:
-            memory: "256Mi" # Mindestens 256 MB Speicher reservieren
-            cpu: "100m" # Mindestens 250 Millicores CPU rese 
+            memory: "200Mi" # Mindestens 256 MB Speicher reservieren
+            cpu: "50m" # Mindestens 250 Millicores CPU rese 
 ---
 apiVersion: v1
 kind: Service
