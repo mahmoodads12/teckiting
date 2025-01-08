@@ -8,7 +8,7 @@ const buildClient = ({ req }) => {
       req.headers.cookie || 'Keine Cookies gefunden'
     );
     return axios.create({
-      baseURL: 'ticketing-mma-de.store',
+      baseURL: 'http://www.ticketing-mma-de.store/',
       headers: {
         ...req.headers, // Alle Header weitergeben, einschließlich Cookies
       },
