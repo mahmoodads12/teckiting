@@ -10,16 +10,31 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+      # Checkout code
       - uses: actions/checkout@v2
+
+      # Installiere doctl für den Zugriff auf DigitalOcean
       - uses: digitalocean/action-doctl@v2
         with:
           token: ${{ secrets.DIGITALOCEAN_ACCESS_TOKEN }}
 
-      # - run: |
-      #     # Secrets in Kubernetes mit kubectl erstellen
-      #     kubectl create secret generic jwt-secret --from-literal=JWT_KEY=${{ secrets.JWT_SECRET }}
-      #     kubectl create secret generic stripe-secret --from-literal=STRIPE_KEY=${{ secrets.STRIPE_KEY }}
+      # Installiere Skaffold
+      - name: Install Skaffold
+        run: |
+          curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v2.7.0/skaffold-linux-amd64
+          sudo mv skaffold /usr/local/bin
+          sudo chmod +x /usr/local/bin/skaffold
 
+      # Kubernetes-Cluster konfigurieren
       - run: doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_ID }}
-      - run: kubectl apply -f infra/k8s && kubectl apply -f infra/k8s-prod
+
+      # Skaffold verwenden, um zu deployen
+      - name: Build and Deploy with Skaffold
+        run: |
+          skaffold run --default-repo=gcr.io/my-project
+
+      # Optional: Deployment-Status anzeigen
+      - run: kubectl get deployments
+      - run: kubectl get pods

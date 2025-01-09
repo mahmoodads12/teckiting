@@ -2,7 +2,7 @@ apiVersion: skaffold/v4beta11
 kind: Config
 build:
   artifacts:
-  - image: mma/auth
+  - image: mahmoodads/auth
     context: auth
     sync:
       manual:
@@ -10,7 +10,7 @@ build:
         dest: .
     docker:
       dockerfile: dockerfile
-  - image: mma/client
+  - image: mahmoodads/client
     context: client
     sync:
       manual:
@@ -18,7 +18,7 @@ build:
         dest: .
     docker:
       dockerfile: dockerfile
-  - image: mma/tickets
+  - image: mahmoodads/tickets
     context: tickets
     sync:
       manual:
@@ -26,7 +26,7 @@ build:
         dest: .
     docker:
       dockerfile: dockerfile
-  - image: mma/orders
+  - image: mahmoodads/orders
     context: orders
     sync:
       manual:
@@ -34,7 +34,7 @@ build:
         dest: .
     docker:
       dockerfile: dockerfile
-  - image: mma/expiration
+  - image: mahmoodads/expiration
     context: expiration
     sync:
       manual:
@@ -42,7 +42,7 @@ build:
         dest: .
     docker:
       dockerfile: dockerfile
-  - image: mma/payments
+  - image: mahmoodads/payments
     context: payments
     sync:
       manual:
@@ -60,7 +60,7 @@ deploy:
   kubectl: {}
 
 ### NEUE SERVICES ### 
-#  - image: mma/tickets
+#  - image: mahmoodads/tickets
 #     context: tickets
 #     sync:
 #       manual:
