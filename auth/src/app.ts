@@ -16,7 +16,7 @@ app.use(
     signed: false,
     secure: process.env.NODE_ENV === 'production', // Nur bei HTTPS aktivieren,
     httpOnly: true,
-    sameSite: 'none', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
+    sameSite: 'lax', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
   })
 );
 
