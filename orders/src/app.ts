@@ -16,7 +16,7 @@ app.use(
   cookieSession({
     signed: false,
     secure: false, // Nur über HTTPS in der Produktion
-    sameSite: 'none', // Wichtig für Cross-Origin-Cookies
+    sameSite: 'lax', // Wichtig für Cross-Origin-Cookies
   })
 );
 
