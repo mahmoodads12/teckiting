@@ -12,22 +12,37 @@ const AppComponent = ({ Component, pageProps, currentUser }) => {
 };
 
 AppComponent.getInitialProps = async (appContext) => {
-  console.log(Object.keys(appContext)); // Should log keys, including `ctx`
+  console.log(Object.keys(appContext)); // Logs the keys, including `ctx`
 
+  // Stelle sicher, dass der client korrekt erstellt wird
   const client = buildClient(appContext.ctx);
-  console.log(client);
-  const { data } = await client.get('/api/users/currentuser');
 
-  let pageProps = {};
-  if (appContext.Component.getInitialProps) {
-    pageProps = await appContext.Component.getInitialProps(
-      appContext.ctx,
-      client,
-      data.currentUser
-    );
+  // Überprüfe, ob die `get` Methode vorhanden ist
+  if (!client.get) {
+    console.error('client.get is not a function');
+    return { pageProps: {}, currentUser: null };
   }
-  console.log(pageProps);
-  return { pageProps, ...data };
+
+  try {
+    // Hole die aktuellen Benutzerdaten
+    const { data } = await client.get('/api/users/currentuser');
+    console.log('Current User Data:', data);
+
+    let pageProps = {};
+    if (appContext.Component.getInitialProps) {
+      pageProps = await appContext.Component.getInitialProps(
+        appContext.ctx,
+        client,
+        data.currentUser
+      );
+    }
+
+    console.log('Page Props:', pageProps);
+    return { pageProps, currentUser: data.currentUser };
+  } catch (error) {
+    console.error('Error fetching user data:', error);
+    return { pageProps: {}, currentUser: null };
+  }
 };
 
 export default AppComponent;
