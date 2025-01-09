@@ -20,7 +20,7 @@ app.use(
   })
 );
 
-app.use(currentUser);
+app.use(currentUser as any);
 
 app.use(createTicketRouter);
 app.use(showTicketRouter);
