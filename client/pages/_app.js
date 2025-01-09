@@ -15,6 +15,7 @@ AppComponent.getInitialProps = async (appContext) => {
   console.log(Object.keys(appContext)); // Should log keys, including `ctx`
 
   const client = buildClient(appContext.ctx);
+  console.log(client);
   const { data } = await client.get('/api/users/currentuser');
 
   let pageProps = {};
