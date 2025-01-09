@@ -38,7 +38,7 @@ AppComponent.getInitialProps = async (appContext) => {
     }
 
     console.log('Page Props:', pageProps);
-    return { pageProps, currentUser: data.currentUser };
+    return { pageProps, ...data };
   } catch (error) {
     console.error('Error fetching user data:', error);
     return { pageProps: {}, currentUser: null };
