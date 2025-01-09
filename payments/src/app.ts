@@ -15,7 +15,7 @@ app.use(
     sameSite: 'none', // Wichtig für Cross-Origin-Cookies
   })
 );
-app.use(currentUser);
+app.use(currentUser as any);
 
 app.use(createChargeRouter);
 

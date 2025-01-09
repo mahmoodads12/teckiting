@@ -15,12 +15,12 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: process.env.NODE_ENV === 'production', // Nur bei HTTPS aktivieren
+    secure: false, // Nur über HTTPS in der Produktion
     sameSite: 'none', // Wichtig für Cross-Origin-Cookies
   })
 );
 
-app.use(currentUser);
+app.use(currentUser as any);
 
 app.use(indexOrderRouter);
 app.use(newOrderRouter);
