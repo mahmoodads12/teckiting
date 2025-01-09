@@ -11,7 +11,8 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: false,
+    secure: process.env.NODE_ENV === 'production', // Nur bei HTTPS aktivieren
+    sameSite: 'none', // Wichtig für Cross-Origin-Cookies
   })
 );
 app.use(currentUser);
