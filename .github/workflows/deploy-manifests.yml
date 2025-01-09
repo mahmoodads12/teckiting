@@ -22,9 +22,7 @@ jobs:
 
       # Installiere Skaffold
       - name: Install Skaffold
-        run: curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v2.7.0/skaffold-linux-amd64
-      - run: sudo mv skaffold /usr/local/bin
-      - run: sudo chmod +x /usr/local/bin/skaffold
+        run: curl -Lo skaffold https://storage.googleapis.com/skaffold/releases/v2.13.2/skaffold-linux-amd64 && chmod +x skaffold && sudo mv skaffold /usr/local/bin
 
       # Kubernetes-Cluster konfigurieren
       - run: doctl kubernetes cluster kubeconfig save ${{ secrets.CLUSTER_ID }}
