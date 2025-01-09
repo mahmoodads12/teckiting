@@ -14,9 +14,9 @@ app.use(json());
 app.use(
   cookieSession({
     signed: false,
-    secure: false,
+    secure: process.env.NODE_ENV === 'production', // Nur bei HTTPS aktivieren,
     httpOnly: true,
-    sameSite: 'lax', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
+    sameSite: 'none', // Oder 'strict', je nachdem, wie restriktiv du sein möchtest
   })
 );
 
